@@ -1,3 +1,17 @@
+<style>
+table {
+  width: 100%;
+  table-layout: fixed; /* Ensures column widths are respected */
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+  word-wrap: break-word; /* This is the key property for wrapping long words */
+}
+</style>
 # Social Media
 Automation examples posted on out on social media sites.
 
