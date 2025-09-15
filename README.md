@@ -13,7 +13,7 @@ Automation examples posted on out on social media sites.
       <tbody>
         <tr>
           <td>2025-09-15</td>
-          <td>PPDM</td>
+          <td>PowerProtect Data Manager</td>
           <td width="max-content">Backing up virtual machine templates</td>
           <td>
             <a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE" target="_blank"><img src="/assets/YouTube_icon.png" alt="YouTube" height="50"/></a> 
