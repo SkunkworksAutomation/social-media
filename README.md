@@ -1,8 +1,8 @@
 # Social Media
 Automation examples posted on out on social media sites.
-   <table style="width:100%; table-layout: fixed; text-align: left">
+   <table style="width:100%; table-layout: fixed;">
       <thead>
-        <tr>
+        <tr style="text-align: left;">
           <th>Published</th>
           <th>Software</th>
           <th>Version</th>
@@ -11,7 +11,7 @@ Automation examples posted on out on social media sites.
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr style="text-align: left;">
           <td width="115">2025-09-15</td>
           <td>PPDM</td>
           <td>19.21</td>
