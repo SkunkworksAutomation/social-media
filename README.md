@@ -11,7 +11,7 @@ Automation examples posted on out on social media sites.
         </tr>
       </thead>
       <tbody>
-        <tr style="text-align: left;">
+        <tr>
           <td width="115">2025-09-15</td>
           <td>PPDM</td>
           <td>19.21</td>
