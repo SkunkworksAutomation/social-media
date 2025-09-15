@@ -12,7 +12,7 @@ Automation examples posted on out on social media sites.
       </thead>
       <tbody>
         <tr>
-          <td width="50">2025-09-15</td>
+          <td width="60">2025-09-15</td>
           <td>PPDM</td>
           <td>Backing up virtual machine templates with PowerProtect Data Manager</td>
           <td>
