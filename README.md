@@ -1,6 +1,23 @@
 # Social Media
 Automation examples posted on out on social media sites.
 
-| Published   | Software | Description                                 | Platform  | Code |
-| :-----------| :--------| :-------------------------------------------| :--------:| :---:|
-| 2025-09-15  | PPDM     | Backing up virtual machine templates        | [![YouTube](/assets/YouTube_icon.png)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)   |      |
+   <table style="width:100%; table-layout: auto;">
+      <thead>
+        <tr>
+          <th>Published</th>
+          <th>Software</th>
+          <th>Description</th>
+          <th>Platform</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025-09-15</td>
+          <td>PPDM</td>
+          <td>Backing up virtual machine templates</td>
+          <td>
+            <a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE" target="_blank"><img src="/assets/YouTube_icon.png" alt="YouTube" height="50"/></a> 
+          </td>
+        </tr>
+      </tbody>
+    </table>
