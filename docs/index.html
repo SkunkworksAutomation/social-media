@@ -16,19 +16,21 @@
         background-color: lightgray
         } 
         table th {
-        font-size: 25px;
-        font-weight: bold;
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: black;
-        color: white;
+          font-size: 25px;
+          font-weight: bold;
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: black;
+          color: white;
         }
         table td {
           font-size: 20px;
         }
-        td.align-center {
+        .container {
+          display: flex;
           align-items: center;
+          justify-content: center;
         }
     </style>     
 </head>
@@ -41,7 +43,11 @@
           <th>Software</th>
           <th>Version</th>
           <th>Description</th>
-          <th>Platform</th>
+          <th>
+            <div class="container">
+            Platform
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -50,8 +56,12 @@
           <td>PPDM</td>
           <td>19.21</td>
           <td>Backing up VMware virtual machine templates</td>
-          <td class="align-center">
-            <a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE" target="_blank"><img src="./assets/YouTube_icon.png" alt="YouTube" height="50"/></a> 
+          <td>
+            <div class="container">
+              <a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE" target="_blank">
+                <img src="./assets/YouTube_icon.png" alt="YouTube" height="50"/>
+              </a>
+            </div>
           </td>
         </tr>
       </tbody>
