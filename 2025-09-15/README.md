@@ -1,0 +1,1 @@
+# Baccking up VMware virtual machine templates
