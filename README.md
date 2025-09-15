@@ -1,12 +1,12 @@
 # Social Media
 Automation examples posted on out on social media sites.
-   <table style="width:100%; table-layout: fixed;">
+   <table style="width:100%; table-layout: fixed; th text-align: left;">
       <thead>
         <tr>
           <th>Published</th>
           <th>Software</th>
           <th>Version</th>
-          <th style="text-align: left;">Description</th>
+          <th>Description</th>
           <th>Platform</th>
         </tr>
       </thead>
