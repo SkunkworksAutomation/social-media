@@ -14,7 +14,7 @@ Automation examples posted on out on social media sites.
         <tr>
           <td>2025-09-15</td>
           <td>PPDM</td>
-          <td>Backing up virtual machine templates</td>
+          <td width="100%">Backing up virtual machine templates</td>
           <td>
             <a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE" target="_blank"><img src="/assets/YouTube_icon.png" alt="YouTube" height="50"/></a> 
           </td>
