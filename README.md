@@ -6,7 +6,7 @@ Automation examples posted on out on social media sites.
           <th>Published</th>
           <th>Software</th>
           <th>Version</th>
-          <th><div style="text-align: left;">Description<</div></th>
+          <th><div style="text-align: left;">Description</div></th>
           <th>Platform</th>
         </tr>
       </thead>
