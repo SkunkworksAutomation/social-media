@@ -1,8 +1,5 @@
 # Social Media
 Automation examples posted on out on social media sites.
-<!-->
-    Test
-<-->
    <table style="width:100%; table-layout: fixed;">
       <thead>
         <tr>
@@ -14,7 +11,7 @@ Automation examples posted on out on social media sites.
       </thead>
       <tbody>
         <tr>
-          <td width="200">2025-09-15</td>
+          <td width="150">2025-09-15</td>
           <td>PPDM</td>
           <td>Backing up virtual machine templates with PowerProtect Data Manager</td>
           <td>
