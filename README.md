@@ -2,11 +2,11 @@
 Automation examples posted on out on social media sites.
    <table style="width:100%; table-layout: fixed;">
       <thead>
-        <tr style="text-align: left;">
+        <tr>
           <th>Published</th>
           <th>Software</th>
           <th>Version</th>
-          <th>Description</th>
+          <th style="text-align: left;">Description</th>
           <th>Platform</th>
         </tr>
       </thead>
