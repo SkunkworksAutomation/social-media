@@ -5,8 +5,8 @@
 
 ## Pre-work
 - ### VMWare
-- - Ensure all vm templates are in the same folder in the target vCenter
-- - NOTE: The folder name, within vcenter, will need to be the same across all vcenters managed by the target instance of PowerProtect Data Manager
+    - Ensure all vm templates are in the same folder in the target vCenter
+    - NOTE: The folder name, within vcenter, will need to be the same across all vcenters managed by the target instance of PowerProtect Data Manager
 
 - ### PowerProect Data Manager
 
