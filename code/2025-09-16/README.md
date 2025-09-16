@@ -1,4 +1,4 @@
-# Getting the protection policies source DD systems, storage unit and replication target DD systems and storage units
+# Getting protection policies source DD systems, storage unit and replication target DD systems and storage units
 ## Dependencies
 - [PowerShell 7](https://github.com/powershell/powershell/releases)
 
