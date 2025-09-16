@@ -1,8 +1,9 @@
 # PowerProtect Data Manager Automation Examples
 ## Published on social media
 
-<a href="https://skunkworksautomation.github.io/social-media" target="_blank"><h2>EXAMPLES DASHBOARD</h2></a>
-
+<h2>
+    <a href="https://skunkworksautomation.github.io/social-media" target="_blank">EXAMPLES DASHBOARD</a>
+</h2>
 This code repository examples are built on PowerShell 7. There two components to each example:
 - ## PowerShell 7 Module:
 **[skunkworks.dm.prototype.psm1](https://github.com/SkunkworksAutomation/social-media/blob/main/code/skunkworks.dm.prototype.psm1)**
