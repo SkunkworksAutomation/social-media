@@ -140,7 +140,8 @@ function get-dm {
                 }
             }
             catch {
-                if($query.code -eq 401){
+                if($query.code -eq 401 `
+                    -and $query.reason -eq "Invalid authentication token"){
                     # Refresh the bearer token
                     Write-Host "[$($dmAuthObject.dmFqdn)]: Refreshing bearer token..." -ForegroundColor Cyan
                     connect-dmapi `
@@ -193,7 +194,8 @@ function get-dm {
                 }
             }
             catch {
-                if($query.code -eq 401){
+                if($query.code -eq 401 `
+                    -and $query.reason -eq "Invalid authentication token"){
                     # Refresh the bearer token
                     Write-Host "[$($dmAuthObject.dmFqdn)]: Refreshing bearer token..." -ForegroundColor Cyan
                     connect-dmapi `
@@ -255,7 +257,8 @@ function set-dm {
                 }
                 break;   
             } catch {
-                if($query.code -eq 401){
+                if($action.code -eq 401 `
+                    -and $action.reason -eq "Invalid authentication token"){
                     # Refresh the bearer token
                     Write-Host "[$($dmAuthObject.dmFqdn)]: Refreshing bearer token..." -ForegroundColor Cyan
                     connect-dmapi `
