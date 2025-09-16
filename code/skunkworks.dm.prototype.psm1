@@ -194,8 +194,8 @@ function get-dm {
                 }
             }
             catch {
-                if($query.code -eq 401 `
-                    -and $query.reason -eq "Invalid authentication token"){
+                if($Paging.code -eq 401 `
+                    -and $Paging.reason -eq "Invalid authentication token"){
                     # Refresh the bearer token
                     Write-Host "[$($dmAuthObject.dmFqdn)]: Refreshing bearer token..." -ForegroundColor Cyan
                     connect-dmapi `
