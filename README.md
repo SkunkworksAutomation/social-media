@@ -1,4 +1,5 @@
-# Social Media (PowerProtect Data Manager Automation Examples)
+# PowerProtect Data Manager Automation Examples
+## Published on social media
 [Examples Dashboard](https://skunkworksautomation.github.io/social-media/)
 
 This code repository examples are built on PowerShell 7. There two components to each example:
