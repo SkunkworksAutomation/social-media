@@ -1,8 +1,7 @@
 # Social Media
-I'm currently in the process of setting this up. Check back later!
-
+[Examples Dashboard](https://skunkworksautomation.github.io/social-media/)
 This code repository examples are built on PowerShell 7. There two components to each example:
-- ## The PowerShell 7 module:
+- ## PowerShell 7 Module:
 **[skunkworks.dm.prototype.psm1](https://github.com/SkunkworksAutomation/social-media/blob/main/code/skunkworks.dm.prototype.psm1)**
 
 The module consists of four methods that do the heavy lifting so you don't have to:
@@ -64,3 +63,6 @@ $action1 = set-dm `
 # Disconnect from the rest api
 disconnect-dmapi
 ```
+- ## Workflow Script:
+The workflow scripts will be contained within a folder on the date they were published in addition to any relevant documentation.
+They will import the module so you, the automation engineer, can focus on process and not have to deal in the minutia
