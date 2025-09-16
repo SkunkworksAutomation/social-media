@@ -8,11 +8,11 @@
     - Ensure all vm templates are in the same folder in the target vCenter
     - NOTE: The folder name, within vcenter, will need to be the same across all vcenters managed by the target instance of PowerProtect Data Manager
 
-- ### PowerProect Data Manager
+- ### PowerProtect Data Manager
     - Create a protection policy for virtual machines, this will be for the templates, you can set schedule to once a year.
     - Create a protection rule for that policy we just created pointed at the vcenter template folder.
 
-- ### Updae the $dms variable within the workflow script
+- ### Update the $dms variable within the workflow script
     - name: The FQDN or IP address of the target PowerProtect Data Manager Server
     - policy: The virtual machine protection policy, configured with a protection rule to grab the virtual machines, contained with the VMware templates folder.
     - folder: The name of the templates folder within the downstream managed vCenters. The folder name must be the same across all vCenters managed by PowerProtect Data Manager.
@@ -30,7 +30,7 @@ $dms = @(
     }
 )
 ```
-## Workflow
+# Workflow
 The code will iterate over each PPDM instance defined within $dms and perform the following actions:
 - Connect to the rest api
 - Query for the attached vcenters
