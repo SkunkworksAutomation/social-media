@@ -21,17 +21,17 @@ foreach($dm in $dms){
     -Version 2
 
     # Qeury for the attached vcenters 
-    $Filters = @(
+    $filters  = @(
         "type eq `"VMWARE_VCENTER`"",
         "and extendedData.internal ne true",
         "and extendedData.assetSource eq true"
     )
     
-    $Endpoint = "infrastructure-objects"
-    Write-Host "`n[GET]: /$($Endpoint)`n[FILTER]: $($Filters) `n[URI]: /$($Endpoint)?filter=$($Filters)"`
+    $endpoint = "infrastructure-objects"
+    Write-Host "`n[GET]: /$($endpoint)`n[FILTER]: $($filters ) `n[URI]: /$($endpoint)?filter=$($filters)"`
     -ForegroundColor Yellow
     $vcs = get-dm `
-    -Endpoint "$($Endpoint)?filter=$($Filters)" `
+    -Endpoint "$($endpoint)?filter=$($filters )" `
     -Version 3
     
     if($vcs.length -gt 0) {
@@ -80,17 +80,17 @@ foreach($dm in $dms){
                
                 # Query until the query1 count matches the templates count
                 do {
-                    $Filters = @(
+                    $filters  = @(
                         "details.vm.folder eq `"$($dm.folder)`"",
                         "and protectable eq true"
                     )
-                    $Endpoint = "assets"
+                    $endpoint = "assets"
                     
-                    Write-Host "[GET]: /$($Endpoint)`n[FILTER]: $($Filters) `n[URI]: /$($Endpoint)?filter=$($Filters)"`
+                    Write-Host "[GET]: /$($endpoint)`n[FILTER]: $($filters ) `n[URI]: /$($endpoint)?filter=$($filters)"`
                     -ForegroundColor Yellow
 
                     $query1 = get-dm `
-                    -Endpoint "$($Endpoint)?filter=$($Filters)" `
+                    -Endpoint "$($endpoint)?filter=$($filters )" `
                     -Version 2
 
                     if($query1.length -eq $templates.length){
@@ -106,16 +106,16 @@ foreach($dm in $dms){
                 
                 Write-Host "`n[$($dm.name)]: Getting protection policy details : $($dm.policy)" -ForegroundColor Cyan
                 # Get the protection policy
-                $Filters = @(
+                $filters  = @(
                     "name eq `"$($dm.policy)`""
                 )
-                $Endpoint = "protection-policies"
+                $endpoint = "protection-policies"
 
-                Write-Host "`n[GET]: /$($Endpoint)`n[FILTER]: $($Filters) `n[URI]: /$($Endpoint)?filter=$($Filters)`n"`
+                Write-Host "`n[GET]: /$($endpoint)`n[FILTER]: $($filters ) `n[URI]: /$($endpoint)?filter=$($filters)`n"`
                 -ForegroundColor Yellow
 
                 $query2 = get-dm `
-                -Endpoint "$($Endpoint)?filter=$($Filters)" `
+                -Endpoint "$($endpoint)?filter=$($filters)" `
                 -Version 3
 
                 # Display the target protection policy
@@ -167,15 +167,15 @@ foreach($dm in $dms){
                 # Monitor until complete
                 Write-Host "`n[$($dm.name)]: Monitoring backup activity id: $($action1.activityId)" -ForegroundColor Cyan
                 do {
-                    $Filters = @(
+                    $filters  = @(
                         "id eq `"$($action1.activityId)`""
                     )
-                    $Endpoint = "activities"
-                    Write-Host "`n[GET]: /$($Endpoint)`n[FILTER]: $($Filters) `n[URI]: /$($Endpoint)?filter=$($Filters)"`
+                    $endpoint = "activities"
+                    Write-Host "`n[GET]: /$($endpoint)`n[FILTER]: $($filters ) `n[URI]: /$($endpoint)?filter=$($filters)"`
                     -ForegroundColor Yellow
 
                     $monitor = get-dm `
-                    -Endpoint "$($Endpoint)?filter=$($Filters)" `
+                    -Endpoint "$($endpoint)?filter=$($filters)" `
                     -Version 3
 
                     Write-Progress `
