@@ -109,25 +109,19 @@ function get-dm {
     begin {
         $Page = 1
         $results = @()
-        $retries = @(1..5)
-        # Check to see if a filter was passed in
-        $match = $Endpoint -match '\?(filter|filterType)='
-        # Join path parameters to the end point
-        $join = "&"
-        if(!$match) {
-            $join = "?"
-        }
+        $retries = @(1..5)  
     }
     process {
         foreach($retry in $retries) {
             try {
                 $query = Invoke-RestMethod `
-                -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)$($join)pageSize=100&page=$($Page)" `
+                -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)" `
                 -Method GET `
                 -ContentType 'application/json' `
                 -Headers ($dmAuthObject.headerToken) `
                 -SkipCertificateCheck
                 
+                # Try and match the different content arrays
                 $match = $query.psobject.Properties.name
                 if($match -match "results") {
                     $results = $query.results
@@ -165,33 +159,33 @@ function get-dm {
         foreach($retry in $retries) {
             try {
                 if($query.page.totalPages -gt 1) {
-                # Increment the page number
-                $Page++
-                # Page through the results
-                do {
-                    $Paging = Invoke-RestMethod `
-                    -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)$($join)pageSize=100&page=$($Page)" `
-                    -Method GET `
-                    -ContentType 'application/json' `
-                    -Headers ($dmAuthObject.headerToken) `
-                    -SkipCertificateCheck
+                    # Increment the page number
+                    $Page++
+                    # Page through the results
+                    do {
+                        $Paging = Invoke-RestMethod `
+                        -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)&page=$($Page)" `
+                        -Method GET `
+                        -ContentType 'application/json' `
+                        -Headers ($dmAuthObject.headerToken) `
+                        -SkipCertificateCheck
 
-                    # CAPTURE THE RESULTS
-                    $match = $Paging.psobject.Properties.name
-                    if($match -match "results") {
-                        $results += $Paging.results
-                    } elseif($match -match "datastores") {
-                        $results += $Paging.datastores
-                    } elseif($match -match "content") {
-                        $results = $query.content
-                    } else {
-                        $results = $query
+                    # Try and match the different content arrays
+                        $match = $Paging.psobject.Properties.name
+                        if($match -match "results") {
+                            $results += $Paging.results
+                        } elseif($match -match "datastores") {
+                            $results += $Paging.datastores
+                        } elseif($match -match "content") {
+                            $results += $query.content
+                        } else {
+                            $results += $query
+                        }
+                            # Increment the page number
+                            $Page++
+                        } 
+                        until ($Paging.page.number -eq $Query.page.totalPages)
                     }
-                        # Increment the page number
-                        $Page++   
-                    } 
-                    until ($Paging.page.number -eq $Query.page.totalPages)
-                }
             }
             catch {
                 if($Paging.code -eq 401 `

@@ -5,7 +5,7 @@ Import-Module .\skunkworks.dm.prototype.psm1 -Force
 # Data Manager Servers
 $dms = @(
     @{
-        name = "ppdm-02.vcorp.local"
+        name = "dm-01.vcorp.local"
     }
 )
 
