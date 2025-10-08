@@ -20,5 +20,6 @@ The code will iterate over each PPDM instance defined within $dms and perform th
 - Connect to the rest api
 - Query for the protected assets matching the filter critera
 - Filter the results based on the asset name matching a regular expression
+    - Note: in this example the regex is looking characters 5,6,7 of the vm display name to determine its role to see if we are going to back it up or not
 - Start an ad hock backup of the assets serially, waiting on each to complete before triggering the next 
 - Logoff of the REST API

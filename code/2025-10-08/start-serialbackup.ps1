@@ -1,3 +1,8 @@
+[CmdletBinding()]
+    param (
+        [Parameter( Mandatory=$true)]
+        [string]$role
+    )
 # Import the modules
 Import-Module .\skunkworks.dm.prototype.psm1 -Force
 
@@ -9,7 +14,7 @@ $dms = @(
     }
 )
 # Define the regex pattern
-$regex = "^esc$"
+$regex = "^$($role)$"
 $userTags = "PPDMBackupPolicy||T1_APP_PROD_TSDM"
 
 # Interate over the data manager servers
