@@ -14,6 +14,12 @@ $dms = @(
     }
 )
 ```
+- ### Update the $userTags variable within the workflow script
+    - $userTags: VMWare virtual machine tag assigned to the asset
+    - Note: The tagging and subsequent regex filter allows for more granular control over asset inclusion / exclusion in the workflow
+```
+$userTags = "PPDMBackupPolicy||T1_APP_PROD_TSDM"
+```
 
 # Workflow
 The code will iterate over each PPDM instance defined within $dms and perform the following actions:
