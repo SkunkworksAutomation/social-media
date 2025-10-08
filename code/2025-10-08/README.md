@@ -1,4 +1,4 @@
-# Start a serial backups on assets within a protection policy
+# Start backups serially on assets within a protection policy
 ## Dependencies
 - [PowerShell 7](https://github.com/powershell/powershell/releases)
 
@@ -19,6 +19,6 @@ $dms = @(
 The code will iterate over each PPDM instance defined within $dms and perform the following actions:
 - Connect to the rest api
 - Query for the protected assets matching the filter critera
-- Filter the results based on the asset name with a regex query
-- Start an ad hock backup of of an asset, monitor until complete and move on to the next asset... 
+- Filter the results based on the asset name matching a regular expression
+- Start an ad hock backup of the assets serially, waiting on each to complete before triggering the next 
 - Logoff of the REST API
