@@ -5,8 +5,6 @@
 ## Pre-work:
 - ### Update the $dms variable within the workflow script
     - name: The FQDN or IP address of the target PowerProtect Data Manager Server
-    - prefix: This is for a like search. The prefix below will match all protected assets starting with linux-
-        - Note: This can be adjusted, or removed to match your specific usecase
 ```
 $dms = @(
     @{
@@ -20,6 +18,10 @@ $dms = @(
 ```
 $userTags = "PPDMBackupPolicy||T1_APP_PROD_TSDM"
 ```
+## Usage:
+### PS C:\social-media> .\start-serialbackup.ps1 -role dbs
+### Where "dbs" appears in characters 5,6,7 of the virtual machines dispaly name
+### Note: This can be adjusted to align with any naming convention
 
 # Workflow
 The code will iterate over each PPDM instance defined within $dms and perform the following actions:
