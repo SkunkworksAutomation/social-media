@@ -18,7 +18,7 @@ $dms = @(
 ```
 ## How the name parsing works
 ```
-# This is used to evaluate which character positions should be parsed by regex
+# This is used to evaluate which character positions that are parsed by regex
 @{l="role";e={
     ($_.name).Substring($chars[0]-1,$chars.length)
 }}
