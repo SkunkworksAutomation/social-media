@@ -11,11 +11,12 @@ Import-Module .\skunkworks.dm.prototype.psm1 -Force
 $dms = @(
     @{
         name = "dm-01.vcorp.local"
+        policy = "policy-moneris"
     }
 )
 # Define the regex pattern
 $regex = "^$($role)$"
-$userTags = "PPDMBackupPolicy||T1_APP_PROD_TSDM"
+
 
 # Interate over the data manager servers
 foreach($dm in $dms){
@@ -32,7 +33,7 @@ foreach($dm in $dms){
     $filters = @(
         "protectionStatus eq `"PROTECTED`""
         "and lastDiscoveryStatus in (`"NEW`",`"DETECTED`",`"NOT_DETECTED`")",
-        "and userTags in (`"$($userTags)`")"
+        "and protectionPolicy.name eq `"$($dm.policy)`""
     )
     $endpoint = "assets"
     Write-Host "[GET]: /$($endpoint)`n[FILTER]: $($filters) `n[URI]: /$($endpoint)?filter=$($filters)"`

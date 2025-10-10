@@ -5,19 +5,16 @@
 ## Pre-work:
 - ### Update the $dms variable within the workflow script
     - name: The FQDN or IP address of the target PowerProtect Data Manager Server
+    - policy: The name of the protection policy to pull the asset list from
 ```
 $dms = @(
     @{
         name = "dm-01.vcorp.local"
+        policy= "YourProtectionPolicyName"
     }
 )
 ```
-- ### Update the $userTags variable within the workflow script
-    - $userTags: VMWare virtual machine tag assigned to the asset
-    - Note: The tagging and subsequent regex filter allows for more granular control over asset inclusion / exclusion in the workflow
-```
-$userTags = "PPDMBackupPolicy||T1_APP_PROD_TSDM"
-```
+
 ## Usage:
 ### PS C:\social-media> .\start-serialbackup.ps1 -role dbs
 ### Where "dbs" appears in characters 5,6,7 of the virtual machines dispaly name
