@@ -38,8 +38,6 @@ Now we count out $chars.length positions, 3 in this example and get dbs
 
 Now we match that against our regex for the application role to see if we are going to backup this vm's role 
 ```
-
-
 ## Usage:
 ### PS C:\social-media> .\start-serialbackup.ps1 -role dbs
 ### Where "dbs" appears in characters 5,6,7 of the virtual machines dispaly name
