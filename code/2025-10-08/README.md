@@ -27,7 +27,7 @@ $dms = @(
 # $dm.characters = @(5,6,7)
 # [array]$chars = $dm.characters
 # $chars[0]-1, or element[0].value-1: 5-1 = 4
-# $chars.length = 3
+# $chars.length, or # of elements in the array = 3
 
 Applied to this example, 0 starts on the left side of the first character in the name
 01234567891011
