@@ -1,4 +1,4 @@
-# Build the cli backup command for ddbmsqlsv.exe
+# Build the cli backup command for ddbmsqlsv.exe from PowerProtect Data Manager
 ```
 EXAMPLE:
 ================================================================================
