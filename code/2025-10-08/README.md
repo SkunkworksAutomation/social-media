@@ -31,7 +31,7 @@ $dms = @(
 
 Applied to this example, 0 starts on the left side of the first character in the name
 01234567891011
-    myvmdbsdc-01
+ myvmdbsdc-01
 
 The 4th position would be to the right of the 2nd m.
 Now we count out $chars.length positions, 3 in this example and get dbs
