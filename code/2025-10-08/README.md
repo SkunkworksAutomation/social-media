@@ -16,7 +16,7 @@ $dms = @(
     }
 )
 ```
-## How the name parsing works
+## How the name parsing works...
 ```
 # This is used to evaluate the character positions that are parsed by regex
 @{l="role";e={
