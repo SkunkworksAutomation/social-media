@@ -6,14 +6,39 @@
 - ### Update the $dms variable within the workflow script
     - name: The FQDN or IP address of the target PowerProtect Data Manager Server
     - policy: The name of the protection policy to pull the asset list from
+    - characters: an array of ints which will determine the starting and ending position for your application role
 ```
 $dms = @(
     @{
         name = "dm-01.vcorp.local"
         policy= "YourProtectionPolicyName"
+        characters = @(5,6,7)
     }
 )
 ```
+## How the name parsing works
+```
+# This is used to evaluate which character positions should be parsed by regex
+@{l="role";e={
+    ($_.name).Substring($chars[0]-1,$chars.length)
+}}
+# Example name: myvmdbsdc-01
+# We want to capture: dbs
+# $dm.characters = @(5,6,7)
+# [array]$chars = $dm.characters
+# $chars[0]-1, or element[0].value-1: 5-1 = 4
+# $chars.length = 3
+
+Applied to this example, 0 starts on the left side of the first character in the name
+01234567891011
+    myvmdbsdc-01
+
+The 4th position would be to the right of the 2nd m.
+Now we count out $chars.length positions, 3 in this example and get dbs
+
+Now we match that against our regex for the application role to see if we are going to backup this vm's role 
+```
+
 
 ## Usage:
 ### PS C:\social-media> .\start-serialbackup.ps1 -role dbs

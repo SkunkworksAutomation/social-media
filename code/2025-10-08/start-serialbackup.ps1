@@ -12,14 +12,20 @@ $dms = @(
     @{
         name = "dm-01.vcorp.local"
         policy = "policy-moneris"
+        characters = @(5,6,7)
     }
 )
+
 # Define the regex pattern
 $regex = "^$($role)$"
 
 
 # Interate over the data manager servers
 foreach($dm in $dms){
+    
+    [array]$chars = $dm.characters
+
+
     Write-Host "`n[$($dm.name)]: Connecting to the rest api"
     # Connect to the rest api
     connect-dmapi `
@@ -50,7 +56,9 @@ foreach($dm in $dms){
     type,`
     @{l="policyId";e={$_.protectionPolicy.id}},`
     @{l="policyName";e={$_.protectionPolicy.name}},`
-    @{l="role";e={($_.name).Substring(4,3)}} | `
+    @{l="role";e={
+        ($_.name).Substring($chars[0]-1,$chars.length)
+    }} | `
     sort-object name
     
     Write-Host "`n[$($dm.name)]: All assets matching userTags `"$($userTags)`"" `
