@@ -105,6 +105,10 @@ foreach($dm in $dms){
         format-table -autosize
 
         # Build the request body
+        [string]$objectiveId = (
+            $policy.objectives | `
+            Where-Object {$_.type -eq "BACKUP"}
+        ).id
         $Body = [ordered]@{
             source = [ordered]@{
                 assetIds = @(
@@ -116,7 +120,7 @@ foreach($dm in $dms){
                 id = $policy.id
                 objectives = @(
                     [ordered]@{
-                        id = ($policy.objectives | Where-Object {$_.type -eq "BACKUP"}).id
+                        id = $objectiveId
                         operation = @{
                             backupLevel = "SYNTHETIC_FULL"
                         }
@@ -145,13 +149,28 @@ foreach($dm in $dms){
         -Body $Body `
         -Message "Starting ad hoc backup for $($vm.name)"
         
-        $action1 | format-list
+        $action1 | select-object `
+        status,`
+        objectiveId,`
+        activityId |`
+        format-table -autosize
+
+        <# 
+            Query for the backup activity in the result
+            This is because if immedaite replication is enabled
+            an activity will be queued for that as well in the result
+        #>
+
+        $backup = $action1 | `
+        where-object {
+            $_.objectiveId -match "^$($objectiveId)$"
+        }
 
         # Monitor until complete
-        Write-Host "`n[$($dm.name)]: Monitoring backup activity id: $($action1.activityId)" -ForegroundColor Cyan
+        Write-Host "`n[$($dm.name)]: Monitoring backup activity id: $($backup.activityId)" -ForegroundColor Cyan
         do {
             $filters  = @(
-                "id eq `"$($action1.activityId)`""
+                "id eq `"$($backup.activityId)`""
             )
             $endpoint = "activities"
             $monitor = get-dm `
@@ -159,7 +178,7 @@ foreach($dm in $dms){
             -Version 3
 
             Write-Progress `
-            -Activity "Monitoring activity id: $($action1.activityId)" `
+            -Activity "Monitoring activity id: $($backup.activityId)" `
             -Status "Percent complete: $($monitor.progress)%" `
             -PercentComplete $($monitor.progress)
             
