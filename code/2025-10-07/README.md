@@ -15,6 +15,12 @@ $dms = @(
     }
 )
 ```
+## Usage:
+### PS C:\social-media> .\set-backupmechanism.ps1 -DataMover SDM
+- DataMover values:
+    - SDM (transparent data snapshots)
+    - VADP (traditional vproxy based backups)
+    - INHERIT_FROM_POLICY (let the protection policy decide)
 
 # Workflow
 The code will iterate over each PPDM instance defined within $dms and perform the following actions:
