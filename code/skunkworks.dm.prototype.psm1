@@ -109,7 +109,7 @@ function get-dm {
     begin {
         $Page = 1
         $results = @()
-        $retries = @(1..5)  
+        $retries = @(1..3)  
     }
     process {
         try {
@@ -159,6 +159,18 @@ function get-dm {
                     -Headers ($dmAuthObject.headerToken) `
                     -SkipCertificateCheck
 
+                    # Try and match the different content arrays
+                    $match = $query.psobject.Properties.name
+                    if($match -match "results") {
+                        $results = $query.results
+                    } elseif($match -match "datastores") {
+                        $results = $query.datastores
+                    } elseif($match -match "content") {
+                        $results = $query.content
+                    } else {
+                        $results = $query
+                    }
+
                     if($retry -eq $retries.length) {
                         throw "[ERROR]: Could not recover from: `n$($_) in $($retries.length) attempts!"
                     }
@@ -180,21 +192,21 @@ function get-dm {
                     -Headers ($dmAuthObject.headerToken) `
                     -SkipCertificateCheck
                 
-                # Write-Host "$($Paging.page | ConvertTo-Json -Depth 10)" -ForegroundColor Magenta
+                    # Write-Host "$($Paging.page | ConvertTo-Json -Depth 10)" -ForegroundColor Magenta
 
-                # Try and match the different content arrays
-                $match = $Paging.psobject.Properties.name
-                if($match -match "results") {
-                    $results += $Paging.results
-                } elseif($match -match "datastores") {
-                    $results += $Paging.datastores
-                } elseif($match -match "content") {
-                    $results += $query.content
-                } else {
-                    $results += $query
-                }
-                    # Increment the page number
-                    $Page++
+                    # Try and match the different content arrays
+                    $match = $Paging.psobject.Properties.name
+                    if($match -match "results") {
+                        $results += $Paging.results
+                    } elseif($match -match "datastores") {
+                        $results += $Paging.datastores
+                    } elseif($match -match "content") {
+                        $results += $query.content
+                    } else {
+                        $results += $query
+                    }
+                        # Increment the page number
+                        $Page++
                 } 
                 until ($Paging.page.number -eq $Query.page.totalPages)
             }
@@ -212,11 +224,37 @@ function get-dm {
                 Start-Sleep -Seconds 2
             } else {
                 [int]$Seconds = 15
-                Write-Host "[$($dmAuthObject.dmFqdn)]: ERROR: `n$($_) `nAttempt: $($retry) of $($retries.length)" -ForegroundColor Red
-                Write-Host "[$($dmAuthObject.dmFqdn)]: Attempting to recover in $($Seconds) seconds...`n" -ForegroundColor Yellow
-                Start-Sleep -Seconds $Seconds
-                if($retry -eq $retries.length) {
-                    throw "[ERROR]: Could not recover from: `n$($_) in $($retries.length) attempts!"
+                foreach($retry in $retries){
+                    Write-Host "[$($dmAuthObject.dmFqdn)]: ERROR: `n$($_) `nAttempt: $($retry) of $($retries.length)" -ForegroundColor Red
+                    Write-Host "[$($dmAuthObject.dmFqdn)]: Attempting to recover in $($Seconds) seconds...`n" -ForegroundColor Yellow
+                    Start-Sleep -Seconds $Seconds
+
+                    $Paging = Invoke-RestMethod `
+                    -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)&page=$($Page)" `
+                    -Method GET `
+                    -ContentType 'application/json' `
+                    -Headers ($dmAuthObject.headerToken) `
+                    -SkipCertificateCheck
+                
+                    # Write-Host "$($Paging.page | ConvertTo-Json -Depth 10)" -ForegroundColor Magenta
+
+                    # Try and match the different content arrays
+                    $match = $Paging.psobject.Properties.name
+                    if($match -match "results") {
+                        $results += $Paging.results
+                    } elseif($match -match "datastores") {
+                        $results += $Paging.datastores
+                    } elseif($match -match "content") {
+                        $results += $query.content
+                    } else {
+                        $results += $query
+                    }
+                    # Increment the page number
+                    $Page++
+
+                    if($retry -eq $retries.length) {
+                        throw "[ERROR]: Could not recover from: `n$($_) in $($retries.length) attempts!"
+                    }
                 }
             }
         } # End try / catch
