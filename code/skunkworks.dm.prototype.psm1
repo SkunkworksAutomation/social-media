@@ -120,7 +120,7 @@ function get-dm {
             -Headers ($dmAuthObject.headerToken) `
             -SkipCertificateCheck
 
-            # Write-Host "$($query.page | ConvertTo-Json -Depth 10)" -ForegroundColor Cyan
+            Write-Host "$($query.page | ConvertTo-Json -Depth 10)" -ForegroundColor Cyan
 
             # Try and match the different content arrays
             $match = $query.psobject.Properties.name
@@ -192,7 +192,7 @@ function get-dm {
                     -Headers ($dmAuthObject.headerToken) `
                     -SkipCertificateCheck
                 
-                    # Write-Host "$($Paging.page | ConvertTo-Json -Depth 10)" -ForegroundColor Magenta
+                    Write-Host "$($Paging.page | ConvertTo-Json -Depth 10)" -ForegroundColor Magenta
 
                     # Try and match the different content arrays
                     $match = $Paging.psobject.Properties.name
@@ -201,9 +201,9 @@ function get-dm {
                     } elseif($match -match "datastores") {
                         $results += $Paging.datastores
                     } elseif($match -match "content") {
-                        $results += $query.content
+                        $results += $Paging.content
                     } else {
-                        $results += $query
+                        $results += $Paging
                     }
                         # Increment the page number
                         $Page++
