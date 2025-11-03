@@ -2,104 +2,104 @@
 $global:dmAuthObject = $null
 $global:dateFormat = "yyyy-MM-ddTHH:mm:ss.fffZ"
 function connect-dmapi {
-[CmdletBinding()]
-param (
-    [Parameter(Mandatory=$true)]
-    [string]$Server,
-    [Parameter(Mandatory=$true)]
-    [int]$Port,
-    [Parameter(Mandatory=$true)]
-    [int]$Version,
-    [switch]$Refresh
-)
-begin {
-        # CHECK TO SEE IF CREDENTIALS EXISTS IF NOT CREATE THEM
-        $Exists = Test-Path -Path ".\$($Server).xml" -PathType Leaf
-        if($Exists) {
-            $Credential = Import-CliXml ".\$($Server).xml"
-        } else {
-            $Credential = Get-Credential
-            $Credential | Export-CliXml ".\$($Server).xml"
-        }  
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$Server,
+        [Parameter(Mandatory=$true)]
+        [int]$Port,
+        [Parameter(Mandatory=$true)]
+        [int]$Version,
+        [switch]$Refresh
+    )
+    begin {
+            # CHECK TO SEE IF CREDENTIALS EXISTS IF NOT CREATE THEM
+            $Exists = Test-Path -Path ".\$($Server).xml" -PathType Leaf
+            if($Exists) {
+                $Credential = Import-CliXml ".\$($Server).xml"
+            } else {
+                $Credential = Get-Credential
+                $Credential | Export-CliXml ".\$($Server).xml"
+            }  
     }
-process {
-    if(!$Refresh) {
-        try {
-            # Build the request body
-            $body = @{
-                username="$($Credential.username)"
-                password="$(
-                    ConvertFrom-SecureString `
-                    -SecureString $Credential.password `
-                    -AsPlainText
-                )"
-            }
-            # Request a bearer token 
-            $auth = `
-            Invoke-RestMethod `
-            -Uri "https://$($Server):$($Port)/api/v$($Version)/login" `
-            -Method POST `
-            -ContentType 'application/json' `
-            -Body (ConvertTo-Json $body) `
-            -SkipCertificateCheck
-
-            # Create the response object
-            $object = [ordered]@{
-                dm = "https://$($Server):$($Port)/api"
-                dmFqdn = $Server
-                dmPort = $Port
-                tokenApi = $auth.access_token
-                tokenType = $auth.token_type
-                tokenRefresh = $auth.refresh_token
-                headerToken = @{
-                    authorization = "$($auth.token_type) $($auth.access_token)"
+    process {
+        if(!$Refresh) {
+            try {
+                # Build the request body
+                $body = @{
+                    username="$($Credential.username)"
+                    password="$(
+                        ConvertFrom-SecureString `
+                        -SecureString $Credential.password `
+                        -AsPlainText
+                    )"
                 }
-                headerRefresh = @{
-                    authorization = "$($auth.token_type) $($auth.refresh_token)"
-                }
-            } # End Object
-            $global:dmAuthObject = (
-                New-Object -TypeName psobject -Property $object
-            )
-            # $global:dmAuthObject | format-table
-
-        } catch {
-            throw "[powerprotect]: Unable to connect to: $($Server)`n$($_.ErrorDetails)"
-        }
-    } else {
-        try {
-            # Build the request body
-            $body = [ordered]@{
-                grant_type = "refresh_token"
-                refresh_token = $dmAuthObject.tokenRefresh
-                scope = "aaa"
-            }
-            # Refresh the bearer token 
-            $auth = `
+                # Request a bearer token 
+                $auth = `
                 Invoke-RestMethod `
-                -Uri "https://$($Server):$($Port)/api/v$($Version)/token" `
+                -Uri "https://$($Server):$($Port)/api/v$($Version)/login" `
                 -Method POST `
                 -ContentType 'application/json' `
-                -Headers ($dmAuthObject.headerRefresh) `
                 -Body (ConvertTo-Json $body) `
                 -SkipCertificateCheck
 
-            # Update authentication properties
-            $global:dmAuthObject.tokenApi = $auth.access_token
-            $global:dmAuthObject.headerToken = @{
-                authorization = "$($auth.token_type) $($auth.access_token)"
+                # Create the response object
+                $object = [ordered]@{
+                    dm = "https://$($Server):$($Port)/api"
+                    dmFqdn = $Server
+                    dmPort = $Port
+                    tokenApi = $auth.access_token
+                    tokenType = $auth.token_type
+                    tokenRefresh = $auth.refresh_token
+                    headerToken = @{
+                        authorization = "$($auth.token_type) $($auth.access_token)"
+                    }
+                    headerRefresh = @{
+                        authorization = "$($auth.token_type) $($auth.refresh_token)"
+                    }
+                } # End Object
+                $global:dmAuthObject = (
+                    New-Object -TypeName psobject -Property $object
+                )
+                # $global:dmAuthObject | format-table
+
+            } catch {
+                throw "[powerprotect]: Unable to connect to: $($Server)`n$($_.ErrorDetails)"
             }
-            # $global:dmAuthObject | format-table
-        }
-        catch {
-            throw "[powerprotect]: Unable to refresh token on: $($Server)`n$($_.ErrorDetails)"
-        }
-    } # End if / else
+        } else {
+            try {
+                # Build the request body
+                $body = [ordered]@{
+                    grant_type = "refresh_token"
+                    refresh_token = $dmAuthObject.tokenRefresh
+                    scope = "aaa"
+                }
+                # Refresh the bearer token 
+                $auth = `
+                    Invoke-RestMethod `
+                    -Uri "https://$($Server):$($Port)/api/v$($Version)/token" `
+                    -Method POST `
+                    -ContentType 'application/json' `
+                    -Headers ($dmAuthObject.headerRefresh) `
+                    -Body (ConvertTo-Json $body) `
+                    -SkipCertificateCheck
+
+                # Update authentication properties
+                $global:dmAuthObject.tokenApi = $auth.access_token
+                $global:dmAuthObject.headerToken = @{
+                    authorization = "$($auth.token_type) $($auth.access_token)"
+                }
+                # $global:dmAuthObject | format-table
+            }
+            catch {
+                throw "[powerprotect]: Unable to refresh token on: $($Server)`n$($_.ErrorDetails)"
+            }
+        } # End if / else
     } # End Process
 } # End Function
 
 function get-dm {
-[CmdletBinding()]
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
         [int]$Version,
@@ -112,110 +112,121 @@ function get-dm {
         $retries = @(1..5)  
     }
     process {
-        foreach($retry in $retries) {
-            try {
-                $query = Invoke-RestMethod `
-                -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)" `
-                -Method GET `
-                -ContentType 'application/json' `
-                -Headers ($dmAuthObject.headerToken) `
-                -SkipCertificateCheck
-                
-                # Try and match the different content arrays
-                $match = $query.psobject.Properties.name
-                if($match -match "results") {
-                    $results = $query.results
-                } elseif($match -match "datastores") {
-                    $results = $query.datastores
-                } elseif($match -match "content") {
-                    $results = $query.content
-                } else {
-                    $results = $query
-                }
+        try {
+            $query = Invoke-RestMethod `
+            -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)" `
+            -Method GET `
+            -ContentType 'application/json' `
+            -Headers ($dmAuthObject.headerToken) `
+            -SkipCertificateCheck
+
+            # Write-Host "$($query.page | ConvertTo-Json -Depth 10)" -ForegroundColor Cyan
+
+            # Try and match the different content arrays
+            $match = $query.psobject.Properties.name
+            if($match -match "results") {
+                $results = $query.results
+            } elseif($match -match "datastores") {
+                $results = $query.datastores
+            } elseif($match -match "content") {
+                $results = $query.content
+            } else {
+                $results = $query
             }
-            catch {
-                if($query.code -eq 401 `
-                    -and $query.reason -eq "Invalid authentication token"){
-                    # Refresh the bearer token
-                    Write-Host "[$($dmAuthObject.dmFqdn)]: Refreshing bearer token..." -ForegroundColor Cyan
-                    connect-dmapi `
-                    -Server $dmAuthObject.dmFqdn `
-                    -Port $dmAuthObject.dmPort `
-                    -Version 2 `
-                    -Refresh
-                    Start-Sleep -Seconds 2
-                } else {
-                    [int]$Seconds = 15
+        }
+        catch {
+            if($query.code -eq 401 `
+                -and $query.reason -eq "Invalid authentication token"){
+                # Refresh the bearer token
+                Write-Host "[$($dmAuthObject.dmFqdn)]: Refreshing bearer token..." -ForegroundColor Cyan
+                connect-dmapi `
+                -Server $dmAuthObject.dmFqdn `
+                -Port $dmAuthObject.dmPort `
+                -Version 2 `
+                -Refresh
+                Start-Sleep -Seconds 2
+            } else {
+                [int]$Seconds = 15
+                foreach($retry in $retries){
                     Write-Host "[$($dmAuthObject.dmFqdn)]: ERROR: `n$($_) `nAttempt: $($retry) of $($retries.length)" -ForegroundColor Red
                     Write-Host "[$($dmAuthObject.dmFqdn)]: Attempting to recover in $($Seconds) seconds...`n" -ForegroundColor Yellow
                     Start-Sleep -Seconds $Seconds
+
+                    $query = Invoke-RestMethod `
+                    -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)" `
+                    -Method GET `
+                    -ContentType 'application/json' `
+                    -Headers ($dmAuthObject.headerToken) `
+                    -SkipCertificateCheck
+
                     if($retry -eq $retries.length) {
                         throw "[ERROR]: Could not recover from: `n$($_) in $($retries.length) attempts!"
                     }
                 }
-            } # End try / catch
-        } # End foreach / retries
-        
-        foreach($retry in $retries) {
-            try {
-                if($query.page.totalPages -gt 1) {
+                
+            }
+        } # End try / catch
+
+        try {
+            if($query.page.totalPages -gt 1) {
+                # Increment the page number
+                $Page++
+                # Page through the results
+                do {
+                    $Paging = Invoke-RestMethod `
+                    -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)&page=$($Page)" `
+                    -Method GET `
+                    -ContentType 'application/json' `
+                    -Headers ($dmAuthObject.headerToken) `
+                    -SkipCertificateCheck
+                
+                # Write-Host "$($Paging.page | ConvertTo-Json -Depth 10)" -ForegroundColor Magenta
+
+                # Try and match the different content arrays
+                $match = $Paging.psobject.Properties.name
+                if($match -match "results") {
+                    $results += $Paging.results
+                } elseif($match -match "datastores") {
+                    $results += $Paging.datastores
+                } elseif($match -match "content") {
+                    $results += $query.content
+                } else {
+                    $results += $query
+                }
                     # Increment the page number
                     $Page++
-                    # Page through the results
-                    do {
-                        $Paging = Invoke-RestMethod `
-                        -Uri "$($dmAuthObject.dm)/v$($Version)/$($Endpoint)&page=$($Page)" `
-                        -Method GET `
-                        -ContentType 'application/json' `
-                        -Headers ($dmAuthObject.headerToken) `
-                        -SkipCertificateCheck
-
-                    # Try and match the different content arrays
-                        $match = $Paging.psobject.Properties.name
-                        if($match -match "results") {
-                            $results += $Paging.results
-                        } elseif($match -match "datastores") {
-                            $results += $Paging.datastores
-                        } elseif($match -match "content") {
-                            $results += $query.content
-                        } else {
-                            $results += $query
-                        }
-                            # Increment the page number
-                            $Page++
-                        } 
-                        until ($Paging.page.number -eq $Query.page.totalPages)
-                    }
+                } 
+                until ($Paging.page.number -eq $Query.page.totalPages)
             }
-            catch {
-                if($Paging.code -eq 401 `
-                    -and $Paging.reason -eq "Invalid authentication token"){
-                    # Refresh the bearer token
-                    Write-Host "[$($dmAuthObject.dmFqdn)]: Refreshing bearer token..." -ForegroundColor Cyan
-                    connect-dmapi `
-                    -Server $dmAuthObject.dmFqdn `
-                    -Port $dmAuthObject.dmPort `
-                    -Version 2 `
-                    -Refresh
-                    Start-Sleep -Seconds 2
-                } else {
-                    [int]$Seconds = 15
-                    Write-Host "[$($dmAuthObject.dmFqdn)]: ERROR: `n$($_) `nAttempt: $($retry) of $($retries.length)" -ForegroundColor Red
-                    Write-Host "[$($dmAuthObject.dmFqdn)]: Attempting to recover in $($Seconds) seconds...`n" -ForegroundColor Yellow
-                    Start-Sleep -Seconds $Seconds
-                    if($retry -eq $retries.length) {
-                        throw "[ERROR]: Could not recover from: `n$($_) in $($retries.length) attempts!"
-                    }
+        }
+        catch {
+            if($Paging.code -eq 401 `
+                -and $Paging.reason -eq "Invalid authentication token"){
+                # Refresh the bearer token
+                Write-Host "[$($dmAuthObject.dmFqdn)]: Refreshing bearer token..." -ForegroundColor Cyan
+                connect-dmapi `
+                -Server $dmAuthObject.dmFqdn `
+                -Port $dmAuthObject.dmPort `
+                -Version 2 `
+                -Refresh
+                Start-Sleep -Seconds 2
+            } else {
+                [int]$Seconds = 15
+                Write-Host "[$($dmAuthObject.dmFqdn)]: ERROR: `n$($_) `nAttempt: $($retry) of $($retries.length)" -ForegroundColor Red
+                Write-Host "[$($dmAuthObject.dmFqdn)]: Attempting to recover in $($Seconds) seconds...`n" -ForegroundColor Yellow
+                Start-Sleep -Seconds $Seconds
+                if($retry -eq $retries.length) {
+                    throw "[ERROR]: Could not recover from: `n$($_) in $($retries.length) attempts!"
                 }
-            } # End try / catch
-        } # End foreach / retries
-        
+            }
+        } # End try / catch
+  
         return $results  
     } # End process
 } # End function
 
 function set-dm {
-[CmdletBinding()]
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
         [string]$Endpoint,
