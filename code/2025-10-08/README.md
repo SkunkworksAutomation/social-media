@@ -7,12 +7,14 @@
     - name: The FQDN or IP address of the target PowerProtect Data Manager Server
     - policy: The name of the protection policy to pull the asset list from
     - characters: an array of ints which will determine the starting and ending position for your application role
+    - retention: how long you want to retained the copies
 ```
 $dms = @(
     @{
         name = "dm-01.vcorp.local"
         policy= "YourProtectionPolicyName"
         characters = @(5,6,7)
+        retention = 28
     }
 )
 ```
